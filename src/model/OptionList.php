@@ -8,7 +8,7 @@ namespace alphayax\utils\cli\model;
 class OptionList implements \Iterator {
 
     /** @var Option[] */
-    protected $options;
+    protected $options = [];
 
     /** @var int */
     protected $iteratorIndex = 0;
