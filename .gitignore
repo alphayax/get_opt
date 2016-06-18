@@ -8,3 +8,6 @@
 # Composer
 /composer.lock
 /vendor/
+
+# Build
+/build/

@@ -44,10 +44,10 @@ class OptionList implements \Iterator {
 
     public function getAll() {
         $options = $this->options;
-        usort( $options, function( Option $a, Option $b){
-            $a = $a->hasShortOpt() ? $a->getShortOpt() : $a->getLongOpt();
-            $b = $b->hasShortOpt() ? $b->getShortOpt() : $b->getLongOpt();
-            return $a < $b ? -1 : 1;
+        usort( $options, function( Option $optionA, Option $optionB){
+            $optionA = $optionA->hasShortOpt() ? $optionA->getShortOpt() : $optionA->getLongOpt();
+            $optionB = $optionB->hasShortOpt() ? $optionB->getShortOpt() : $optionB->getLongOpt();
+            return $optionA < $optionB ? -1 : 1;
         });
         return $options;
     }
