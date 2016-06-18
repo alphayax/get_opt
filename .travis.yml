@@ -10,7 +10,9 @@ install:
   - composer dump-autoload
 
 script:
+  - mkdir -p build/cov
+  - mkdir -p build/logs
   - php vendor/bin/phpunit -c phpunit.xml
 
 after_success:
-  - travis_retry php vendor/bin/codacycoverage clover clover.xml
+  - travis_retry php vendor/bin/codacycoverage clover build/logs/clover.xml
