@@ -1,0 +1,10 @@
+
+# IDE
+/.idea/
+
+# PhpUnit
+/clover.xml
+
+# Composer
+/composer.lock
+/vendor/
