@@ -9,8 +9,8 @@ A library to manage scripts arguments
 [![pakagist](https://img.shields.io/packagist/v/alphayax/get_opt.svg)](https://packagist.org/packages/alphayax/get_opt)
 
 [![Travis](https://travis-ci.org/alphayax/get_opt.svg)](https://travis-ci.org/alphayax/get_opt)
-[![Coverage Status](https://coveralls.io/repos/github/alphayax/get_opt/badge.svg?branch=master)](https://coveralls.io/github/alphayax/get_opt?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8bfe4b0f7bbb414b94502353e520cbac)](https://www.codacy.com/app/alphayax/get_opt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alphayax/get_opt&amp;utm_campaign=Badge_Grade)
+[![Coverage Status](https://api.codacy.com/project/badge/Coverage/7bcc28be8edf41d8b9285418197d093f)](https://www.codacy.com/app/alphayax/get_opt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alphayax/get_opt&amp;utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7bcc28be8edf41d8b9285418197d093f)](https://www.codacy.com/app/alphayax/get_opt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alphayax/get_opt&amp;utm_campaign=Badge_Grade)
 
 [![License](https://poser.pugx.org/alphayax/get_opt/license)](https://packagist.org/packages/alphayax/get_opt)
 [![Total Downloads](https://poser.pugx.org/alphayax/get_opt/downloads)](https://packagist.org/packages/alphayax/get_opt)
@@ -23,9 +23,10 @@ A class to parse parameters given to a script
 $Args = new GetOpt();
 $Args->addShortOpt( 'd', 'Debug mode');
 $Args->addLongOpt( 'dry-run', 'Dry Run mode');
-$Args->addOpt( 'v', 'verbose', 'Verbose Mode");
+$Args->addOpt( 'v', 'verbose', 'Verbose Mode');
 $Args->parse();
 
+$isDryRun  = $Args->hasOption( 'dry-run');
 $isVerbose = $Args->hasOption( 'v') || $Args->hasOption( 'verbose');
 ```
 
