@@ -14,12 +14,17 @@ class OptionList implements \Iterator {
     protected $iteratorIndex = 0;
 
     /**
+     * Add an option to the list
      * @param \alphayax\utils\cli\model\Option $option
      */
     public function add( Option $option) {
         $this->options[] = $option;
     }
 
+    /**
+     * Return an array with longs option for get_opt
+     * @return array
+     */
     public function serializeLongOpts() {
         $longOpts = [];
         foreach( $this->options as $option){
@@ -31,6 +36,10 @@ class OptionList implements \Iterator {
         return $longOpts;
     }
 
+    /**
+     * Return a serialized string with short options for get_opt
+     * @return string
+     */
     public function serializeShortOpts() {
         $letters = '';
         foreach( $this->options as $option){
@@ -42,6 +51,10 @@ class OptionList implements \Iterator {
         return $letters;
     }
 
+    /**
+     * Get all options
+     * @return \alphayax\utils\cli\model\Option[]
+     */
     public function getAll() {
         $options = $this->options;
         usort( $options, function( Option $optionA, Option $optionB){
@@ -52,6 +65,10 @@ class OptionList implements \Iterator {
         return $options;
     }
 
+    /**
+     * Get required options
+     * @return array
+     */
     public function getRequiredOpts() {
         $requiredOpts = [];
         foreach( $this->options as $option){
@@ -62,6 +79,10 @@ class OptionList implements \Iterator {
         return $requiredOpts;
     }
 
+    /**
+     * Get the pad of long args for display in help
+     * @return int
+     */
     public function getLongPad() {
         $pad = 1;
         foreach( $this->options as $option){
@@ -76,6 +97,10 @@ class OptionList implements \Iterator {
         return $pad + 2; // +2 is for double hyphen (--)
     }
 
+    /**
+     * Get the pad of short args for display in help
+     * @return int
+     */
     public function getShortPad() {
         $pad = 1;
         foreach( $this->options as $option){

@@ -1,6 +1,7 @@
 <?php
 namespace alphayax\utils\cli;
 use alphayax\utils\cli\exception\MissingArgException;
+use alphayax\utils\cli\exception\MissingArgValueException;
 use alphayax\utils\cli\model\Help;
 use alphayax\utils\cli\model\Option;
 use alphayax\utils\cli\model\OptionList;
@@ -97,9 +98,6 @@ class GetOpt {
             $exception->setRequiredArgs( $requiredOpts);
             throw $exception;
         }
-
-        /// If provided fields needs a non provided value, throw an exception
-        // TODO : MissingArgValueException
     }
 
     /**
