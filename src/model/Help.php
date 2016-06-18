@@ -4,14 +4,21 @@ namespace alphayax\utils\cli\model;
 class Help {
 
     /** @var string */
-    protected $description;
+    protected $description = '';
+
+    /**
+     * @param string $description
+     */
+    public function setDescription( $description) {
+        $this->description = $description;
+    }
 
     /**
      *
      */
     protected function displayDescription() {
-        if( $this->description){
-            echo "Description" . PHP_EOL;
+        if( ! empty( $this->description)){
+            echo 'Description' . PHP_EOL;
             echo "\t". $this->description. PHP_EOL;
             echo PHP_EOL;
         }
@@ -22,8 +29,7 @@ class Help {
      */
     protected function displayUsage() {
         echo 'Usage' . PHP_EOL;
-        echo "\t/usr/bin/php " . basename( $_SERVER['SCRIPT_FILENAME']) . ' [OPTIONS]';
-        echo PHP_EOL;
+        echo "\t/usr/bin/php " . basename( $_SERVER['SCRIPT_FILENAME']) . ' [OPTIONS]'. PHP_EOL;
         echo PHP_EOL;
     }
 
@@ -39,35 +45,28 @@ class Help {
         $emptyLongPad  = str_repeat( ' ', $longPad);
         foreach( $options as $option){
 
-            $C = $option->hasValue() ? ' <value>' : '';
+            $valueFlag = $option->hasValue() ? ' <value>' : '';
 
             /// Short opt
-            $C1 = $emptyShortPad;
+            $shortOpt = $emptyShortPad;
             if( $option->hasShortOpt()){
-                $C1 = '-'. $option->getShortOpt();
-                if( $option->hasValue()){
-                    $C1 .= ' <value>';
-                }
-                $C1 = str_pad( $C1, $shortPad, ' ');
+                $shortOpt = '-'. $option->getShortOpt() . $valueFlag;
+                $shortOpt = str_pad( $shortOpt, $shortPad, ' ');
             }
 
             /// Long opt
-            $C2 = $emptyLongPad;
+            $longOpt = $emptyLongPad;
             if( $option->hasLongOpt()){
-                $C2 = '--'. $option->getLongOpt();
-                if( $option->hasValue()){
-                    $C2 .= ' <value>';
-                }
-                $C2 = str_pad( $C2, $longPad, ' ');
+                $longOpt = '--'. $option->getLongOpt() . $valueFlag;
+                $longOpt = str_pad( $longOpt, $longPad, ' ');
             }
 
-            $C3 = $option->getDescription();
+            $description = $option->getDescription();
             if( $option->isRequired()){
-                $C3 = '[REQUIRED] '. $C3;
+                $description = '[REQUIRED] '. $description;
             }
 
-            
-            echo "\t$C1\t$C2\t$C3".PHP_EOL;
+            echo "\t$shortOpt\t$longOpt\t$description".PHP_EOL;
         }
 
         echo PHP_EOL;
@@ -81,13 +80,6 @@ class Help {
         $this->displayDescription();
         $this->displayUsage();
         $this->displayOptions( $optionList);
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description) {
-        $this->description = $description;
     }
 
 }
