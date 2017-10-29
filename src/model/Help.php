@@ -1,6 +1,10 @@
 <?php
 namespace alphayax\utils\cli\model;
 
+/**
+ * Class Help
+ * @package alphayax\utils\cli\model
+ */
 class Help {
 
     /** @var string */
@@ -14,7 +18,7 @@ class Help {
     }
 
     /**
-     *
+     * Display the description
      */
     protected function displayDescription() {
         if( ! empty( $this->description)){
@@ -25,7 +29,7 @@ class Help {
     }
 
     /**
-     *
+     * Display the "how to use" line
      */
     protected function displayUsage() {
         echo 'Usage' . PHP_EOL;
@@ -34,6 +38,7 @@ class Help {
     }
 
     /**
+     * Display all the available options
      * @param \alphayax\utils\cli\model\OptionList $optionList
      */
     protected function displayOptions( OptionList $optionList) {

@@ -1,7 +1,6 @@
 <?php
 namespace alphayax\utils\cli;
 use alphayax\utils\cli\exception\MissingArgException;
-use alphayax\utils\cli\exception\MissingArgValueException;
 use alphayax\utils\cli\model\Help;
 use alphayax\utils\cli\model\Option;
 use alphayax\utils\cli\model\OptionList;
@@ -54,7 +53,6 @@ class GetOpt {
      * @param $optDesc
      * @param bool|false $hasValue
      * @param bool|false $isRequired
-     * @throws \Exception
      */
     public function addShortOpt( $optLetter, $optDesc, $hasValue = false, $isRequired = false){
         $this->addOpt( $optLetter, '', $optDesc, $hasValue, $isRequired);
@@ -76,6 +74,7 @@ class GetOpt {
      * Parse the args given to the script
      * Display help if -h or --help option have been specified
      * Throw an exception if required options have not been provided
+     * @throws \alphayax\utils\cli\exception\MissingArgException
      */
     public function parse(){
         /// Parse args
