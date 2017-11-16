@@ -1,12 +1,13 @@
 <?php
+
 namespace alphayax\utils\cli\model;
 
 /**
  * Class OptionList
  * @package alphayax\utils\cli\model
  */
-class OptionList implements \Iterator {
-
+class OptionList implements \Iterator
+{
     /** @var Option[] */
     protected $options = [];
 
@@ -17,7 +18,8 @@ class OptionList implements \Iterator {
      * Add an option to the list
      * @param \alphayax\utils\cli\model\Option $option
      */
-    public function add( Option $option) {
+    public function add(Option $option)
+    {
         $this->options[] = $option;
     }
 
@@ -25,10 +27,11 @@ class OptionList implements \Iterator {
      * Return an array with longs option for get_opt
      * @return array
      */
-    public function serializeLongOpts() {
+    public function serializeLongOpts()
+    {
         $longOpts = [];
-        foreach( $this->options as $option){
-            if( $option->hasLongOpt()){
+        foreach ($this->options as $option) {
+            if ($option->hasLongOpt()) {
                 $hasValueFlag = $option->hasValue() ? ':' : '';
                 $longOpts[] = $option->getLongOpt() . $hasValueFlag;
             }
@@ -40,10 +43,11 @@ class OptionList implements \Iterator {
      * Return a serialized string with short options for get_opt
      * @return string
      */
-    public function serializeShortOpts() {
+    public function serializeShortOpts()
+    {
         $letters = '';
-        foreach( $this->options as $option){
-            if( $option->hasShortOpt()){
+        foreach ($this->options as $option) {
+            if ($option->hasShortOpt()) {
                 $hasValueFlag = $option->hasValue() ? ':' : '';
                 $letters .= $option->getShortOpt() . $hasValueFlag;
             }
@@ -55,9 +59,10 @@ class OptionList implements \Iterator {
      * Get all options
      * @return \alphayax\utils\cli\model\Option[]
      */
-    public function getAll() {
+    public function getAll()
+    {
         $options = $this->options;
-        usort( $options, function( Option $optionA, Option $optionB){
+        usort($options, function (Option $optionA, Option $optionB) {
             $optionA = $optionA->hasShortOpt() ? $optionA->getShortOpt() : $optionA->getLongOpt();
             $optionB = $optionB->hasShortOpt() ? $optionB->getShortOpt() : $optionB->getLongOpt();
             return $optionA < $optionB ? -1 : 1;
@@ -69,10 +74,11 @@ class OptionList implements \Iterator {
      * Get required options
      * @return array
      */
-    public function getRequiredOpts() {
+    public function getRequiredOpts()
+    {
         $requiredOpts = [];
-        foreach( $this->options as $option){
-            if( $option->isRequired()){
+        foreach ($this->options as $option) {
+            if ($option->isRequired()) {
                 $requiredOpts[] = $option->hasShortOpt() ? $option->getShortOpt() : $option->getLongOpt();
             }
         }
@@ -83,12 +89,13 @@ class OptionList implements \Iterator {
      * Get the pad of long args for display in help
      * @return int
      */
-    public function getLongPad() {
+    public function getLongPad()
+    {
         $pad = 1;
-        foreach( $this->options as $option){
-            if( $option->hasLongOpt()){
-                $optLen = strlen( $option->getLongOpt());
-                if( $option->hasValue()){
+        foreach ($this->options as $option) {
+            if ($option->hasLongOpt()) {
+                $optLen = strlen($option->getLongOpt());
+                if ($option->hasValue()) {
                     $optLen += 8;   // +8 is for the str len of " <value>"
                 }
                 $pad = $optLen > $pad ? $optLen : $pad;
@@ -101,12 +108,13 @@ class OptionList implements \Iterator {
      * Get the pad of short args for display in help
      * @return int
      */
-    public function getShortPad() {
+    public function getShortPad()
+    {
         $pad = 1;
-        foreach( $this->options as $option){
-            if( $option->hasShortOpt()){
-                $optLen = strlen( $option->getShortOpt());
-                if( $option->hasValue()){
+        foreach ($this->options as $option) {
+            if ($option->hasShortOpt()) {
+                $optLen = strlen($option->getShortOpt());
+                if ($option->hasValue()) {
                     $optLen += 8;   // +8 is for the str len of " <value>"
                 }
                 $pad = $optLen > $pad ? $optLen : $pad;
@@ -121,7 +129,8 @@ class OptionList implements \Iterator {
      * @return mixed Can return any type.
      * @since 5.0.0
      */
-    public function current() {
+    public function current()
+    {
         return $this->options[$this->iteratorIndex];
     }
 
@@ -131,7 +140,8 @@ class OptionList implements \Iterator {
      * @return void Any returned value is ignored.
      * @since 5.0.0
      */
-    public function next() {
+    public function next()
+    {
         $this->iteratorIndex++;
     }
 
@@ -141,7 +151,8 @@ class OptionList implements \Iterator {
      * @return mixed scalar on success, or null on failure.
      * @since 5.0.0
      */
-    public function key() {
+    public function key()
+    {
         return $this->iteratorIndex;
     }
 
@@ -152,8 +163,9 @@ class OptionList implements \Iterator {
      * Returns true on success or false on failure.
      * @since 5.0.0
      */
-    public function valid() {
-        return array_key_exists( $this->iteratorIndex, $this->options);
+    public function valid()
+    {
+        return array_key_exists($this->iteratorIndex, $this->options);
     }
 
     /**
@@ -162,7 +174,8 @@ class OptionList implements \Iterator {
      * @return void Any returned value is ignored.
      * @since 5.0.0
      */
-    public function rewind() {
+    public function rewind()
+    {
         $this->iteratorIndex = 0;
     }
 
