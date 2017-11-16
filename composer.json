@@ -4,6 +4,9 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "license": "LGPL-2.1",
+  "support": {
+    "issues": "https://github.com/alphayax/get_opt/issues"
+  },
   "authors": [
     {
       "name": "Yann Ponzoni",
