@@ -78,7 +78,7 @@ class GetOpt
     public function addOpt($optLetter, $optName, $optDesc, $hasValue = false, $isRequired = false)
     {
         $option = new Option($optLetter, $optName, $optDesc, $hasValue, $isRequired);
-        $this->options->add( $option);
+        $this->options->add($option);
 
         return $option;
     }
@@ -93,15 +93,33 @@ class GetOpt
     {
         /// Parse args
         $this->opt_x = getopt($this->options->serializeShortOpts(), $this->options->serializeLongOpts());
-        $requiredOpts = $this->options->getRequiredOpts();
-        $providedOpts = array_keys($this->opt_x);
-        $missingOpts = array_diff($requiredOpts, $providedOpts);
+
+        /// Check required fields
+        $this->checkRequiredOptions();
 
         /// If help flag have been specified, display help and exit
         if ($this->hasOptionName('h') || $this->hasOptionName('help')) {
             $this->help->display($this->options);
             exit(0);
         }
+    }
+
+    /**
+     * @throws \alphayax\utils\cli\exception\MissingArgException
+     */
+    private function checkRequiredOptions()
+    {
+        $providedOpts = array_keys($this->opt_x);
+        $requiredOpts = $this->options->getRequiredOpts();
+
+        $missingOpts = [];
+        foreach ($requiredOpts as $requiredOpt) {
+            if ( ! in_array($requiredOpt->getShortOpt(), $providedOpts)
+                && ! in_array($requiredOpt->getLongOpt(), $providedOpts)) {
+                $missingOpts[] = $requiredOpt;
+            }
+        }
+
 
         /// If required fields are missing, throw an exception
         if ( ! empty($missingOpts)) {
@@ -130,7 +148,7 @@ class GetOpt
      */
     public function getValue(Option $option)
     {
-        return @$this->opt_x[$option->getShortOpt()] ?: $this->opt_x[$option->getLongOpt()];
+        return @$this->opt_x[$option->getShortOpt()] ?: @$this->opt_x[$option->getLongOpt()];
     }
 
     /**

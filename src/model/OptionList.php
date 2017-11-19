@@ -72,14 +72,14 @@ class OptionList implements \Iterator
 
     /**
      * Get required options
-     * @return array
+     * @return Option[]
      */
     public function getRequiredOpts()
     {
         $requiredOpts = [];
         foreach ($this->options as $option) {
             if ($option->isRequired()) {
-                $requiredOpts[] = $option->hasShortOpt() ? $option->getShortOpt() : $option->getLongOpt();
+                $requiredOpts[] = $option;
             }
         }
         return $requiredOpts;

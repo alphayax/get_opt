@@ -2,19 +2,21 @@
 
 namespace alphayax\utils\cli\exception;
 
+use alphayax\utils\cli\model\Option;
+
 /**
  * Class MissingArgException
  * @package alphayax\utils\cli\exception
  */
 class MissingArgException extends \Exception
 {
-    /** @var string[] List of missing Args */
+    /** @var Option[] List of missing Args */
     protected $missingArgs = [];
 
     /** @var string[] List of provided Args */
     protected $providedArgs = [];
 
-    /** @var string[] List of required Args */
+    /** @var Option[] List of required Args */
     protected $requiredArgs = [];
 
     /**
@@ -29,7 +31,7 @@ class MissingArgException extends \Exception
     }
 
     /**
-     * @return \string[]
+     * @return Option[]
      */
     public function getMissingArgs()
     {
@@ -37,12 +39,20 @@ class MissingArgException extends \Exception
     }
 
     /**
-     * @param \string[] $missingArgs
+     * @param Option[] $missingArgs
      */
     public function setMissingArgs($missingArgs)
     {
         $this->missingArgs = $missingArgs;
-        $this->message .= ' : ( ' . implode(', ', $missingArgs) . ')';
+
+        $this->message .= ' : ( ';
+        foreach ($missingArgs as $missingArg) {
+            $this->message .= "[" .
+                ($missingArg->hasShortOpt() ? ' -' . $missingArg->getShortOpt() : '') .
+                ($missingArg->hasLongOpt() ? ' --' . $missingArg->getLongOpt() : '') .
+                ']';
+        }
+        $this->message .= ' )';
     }
 
     /**
@@ -62,7 +72,7 @@ class MissingArgException extends \Exception
     }
 
     /**
-     * @return \string[]
+     * @return Option[]
      */
     public function getRequiredArgs()
     {
@@ -70,7 +80,7 @@ class MissingArgException extends \Exception
     }
 
     /**
-     * @param \string[] $requiredArgs
+     * @param Option[] $requiredArgs
      */
     public function setRequiredArgs($requiredArgs)
     {
