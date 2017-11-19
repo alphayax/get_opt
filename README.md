@@ -15,20 +15,32 @@ A library to manage scripts arguments
 [![License](https://poser.pugx.org/alphayax/get_opt/license)](https://packagist.org/packages/alphayax/get_opt)
 [![Total Downloads](https://poser.pugx.org/alphayax/get_opt/downloads)](https://packagist.org/packages/alphayax/get_opt)
 
-### GetOpt
+## Examples
 
-A class to parse parameters given to a script
+### Check if a parameter with a specific name is set
 
 ```php
 $Args = new GetOpt();
 $Args->addShortOpt( 'd', 'Debug mode');
 $Args->addLongOpt( 'dry-run', 'Dry Run mode');
-$Args->addOpt( 'v', 'verbose', 'Verbose Mode');
+
 $Args->parse();
 
-$isDryRun  = $Args->hasOption( 'dry-run');
-$isVerbose = $Args->hasOption( 'v') || $Args->hasOption( 'verbose');
+$isDryRun  = $Args->hasOptionName( 'dry-run');
 ```
+
+### Check if a parameter (specified via a letter or a name) is set
+
+```php
+$Opt = new GetOpt();
+$Opt->setDescription('This script is a tiny example to show library features');
+$verboseOption = $Opt->addOpt('v', 'verbose', 'Verbose Mode');
+
+$Opt->parse();
+
+$isVerboseMode = $Opt->hasOption( $verboseOption);
+```
+
 
 ### Auto-generated Help
 

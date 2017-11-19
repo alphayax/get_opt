@@ -46,10 +46,11 @@ class GetOpt
      * @param            $optDesc
      * @param bool|false $hasValue
      * @param bool|false $isRequired
+     * @return \alphayax\utils\cli\model\Option
      */
     public function addLongOpt($optName, $optDesc, $hasValue = false, $isRequired = false)
     {
-        $this->addOpt('', $optName, $optDesc, $hasValue, $isRequired);
+        return $this->addOpt('', $optName, $optDesc, $hasValue, $isRequired);
     }
 
     /**
@@ -58,10 +59,11 @@ class GetOpt
      * @param            $optDesc
      * @param bool|false $hasValue
      * @param bool|false $isRequired
+     * @return \alphayax\utils\cli\model\Option
      */
     public function addShortOpt($optLetter, $optDesc, $hasValue = false, $isRequired = false)
     {
-        $this->addOpt($optLetter, '', $optDesc, $hasValue, $isRequired);
+        return $this->addOpt($optLetter, '', $optDesc, $hasValue, $isRequired);
     }
 
     /**
@@ -71,10 +73,14 @@ class GetOpt
      * @param $optDesc
      * @param $hasValue
      * @param $isRequired
+     * @return \alphayax\utils\cli\model\Option
      */
     public function addOpt($optLetter, $optName, $optDesc, $hasValue = false, $isRequired = false)
     {
-        $this->options->add(new Option($optLetter, $optName, $optDesc, $hasValue, $isRequired));
+        $option = new Option($optLetter, $optName, $optDesc, $hasValue, $isRequired);
+        $this->options->add( $option);
+
+        return $option;
     }
 
     /**
@@ -92,7 +98,7 @@ class GetOpt
         $missingOpts = array_diff($requiredOpts, $providedOpts);
 
         /// If help flag have been specified, display help and exit
-        if ($this->hasOption('h') || $this->hasOption('help')) {
+        if ($this->hasOptionName('h') || $this->hasOptionName('help')) {
             $this->help->display($this->options);
             exit(0);
         }
@@ -112,9 +118,19 @@ class GetOpt
      * @param $optionName
      * @return mixed
      */
-    public function getOptionValue($optionName)
+    public function getValueName($optionName)
     {
         return @$this->opt_x[$optionName];
+    }
+
+    /**
+     * Return the value of a specific option
+     * @param Option $option
+     * @return mixed
+     */
+    public function getValue(Option $option)
+    {
+        return @$this->opt_x[$option->getShortOpt()] ?: $this->opt_x[$option->getLongOpt()];
     }
 
     /**
@@ -122,9 +138,20 @@ class GetOpt
      * @param $optionName
      * @return bool
      */
-    public function hasOption($optionName)
+    public function hasOptionName($optionName)
     {
         return array_key_exists($optionName, $this->opt_x);
+    }
+
+    /**
+     * Return true if the option have been specified in script args
+     * @param Option $option
+     * @return bool
+     */
+    public function hasOption(Option $option)
+    {
+        return array_key_exists($option->getLongOpt(), $this->opt_x)
+            || array_key_exists($option->getShortOpt(), $this->opt_x);
     }
 
     /**
