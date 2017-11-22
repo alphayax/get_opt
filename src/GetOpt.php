@@ -94,14 +94,14 @@ class GetOpt
         /// Parse args
         $this->opt_x = getopt($this->options->serializeShortOpts(), $this->options->serializeLongOpts());
 
-        /// Check required fields
-        $this->checkRequiredOptions();
-
         /// If help flag have been specified, display help and exit
         if ($this->hasOptionName('h') || $this->hasOptionName('help')) {
             $this->help->display($this->options);
             exit(0);
         }
+
+        /// Check required fields
+        $this->checkRequiredOptions();
     }
 
     /**
