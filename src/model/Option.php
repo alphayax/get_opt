@@ -21,22 +21,28 @@ class Option
     protected $isRequired = false;
 
     /** @var bool Opt has value associated */
-    protected $hasValue = false;
+    protected $askValue = false;
+
+    /** @var bool Parsed presence of the variable */
+    protected $isPresent = false;
+
+    /** @var string|array Parsed value of the option */
+    protected $value = '';
 
     /**
      * Option constructor.
      * @param string $optShortName
      * @param string $optLongName
      * @param string $optDesc
-     * @param bool   $hasValue
+     * @param bool   $askValue Define if the option need an associated value (eg: -n <value>)
      * @param bool   $isRequired
      */
-    function __construct($optShortName = '', $optLongName = '', $optDesc = '', $hasValue = false, $isRequired = false)
+    function __construct($optShortName = '', $optLongName = '', $optDesc = '', $askValue = false, $isRequired = false)
     {
         $this->shortOpt = $optShortName;
         $this->longOpt = $optLongName;
         $this->description = $optDesc;
-        $this->hasValue = $hasValue;
+        $this->askValue = $askValue;
         $this->isRequired = $isRequired;
     }
 
@@ -91,9 +97,41 @@ class Option
     /**
      * @return boolean
      */
-    public function hasValue()
+    public function askValue()
     {
-        return $this->hasValue;
+        return $this->askValue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPresent()
+    {
+        return $this->isPresent;
+    }
+
+    /**
+     * @param bool $isPresent
+     */
+    public function setIsPresent($isPresent = true)
+    {
+        $this->isPresent = $isPresent;
+    }
+
+    /**
+     * @return string|array
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string|array $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
     }
 
 }

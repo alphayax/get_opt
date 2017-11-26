@@ -26,9 +26,6 @@ class GetOpt
     /** @var \alphayax\utils\cli\model\Help */
     protected $help;
 
-    /** @var array Args passed to the script */
-    private $opt_x = [];
-
     /**
      * GetOpt constructor.
      * Add the -h and --help options
@@ -47,6 +44,7 @@ class GetOpt
      * @param bool|false $hasValue
      * @param bool|false $isRequired
      * @return \alphayax\utils\cli\model\Option
+     * @throws \alphayax\utils\cli\exception\ConflictException
      */
     public function addLongOpt($optName, $optDesc, $hasValue = false, $isRequired = false)
     {
@@ -60,6 +58,7 @@ class GetOpt
      * @param bool|false $hasValue
      * @param bool|false $isRequired
      * @return \alphayax\utils\cli\model\Option
+     * @throws \alphayax\utils\cli\exception\ConflictException
      */
     public function addShortOpt($optLetter, $optDesc, $hasValue = false, $isRequired = false)
     {
@@ -74,6 +73,7 @@ class GetOpt
      * @param $hasValue
      * @param $isRequired
      * @return \alphayax\utils\cli\model\Option
+     * @throws \alphayax\utils\cli\exception\ConflictException
      */
     public function addOpt($optLetter, $optName, $optDesc, $hasValue = false, $isRequired = false)
     {
@@ -86,90 +86,106 @@ class GetOpt
     /**
      * Parse the args given to the script
      * Display help if -h or --help option have been specified
-     * Throw an exception if required options have not been provided
-     * @throws \alphayax\utils\cli\exception\MissingArgException
+     * Print help and exit if required args are missing
      */
     public function parse()
     {
         /// Parse args
-        $this->opt_x = getopt($this->options->serializeShortOpts(), $this->options->serializeLongOpts());
+        $this->options->parse();
 
-        /// If help flag have been specified, display help and exit
-        if ($this->hasOptionName('h') || $this->hasOptionName('help')) {
-            $this->help->display($this->options);
-            exit(0);
-        }
-
-        /// Check required fields
-        $this->checkRequiredOptions();
+        /// Basic checks
+        $this->checkForHelp();
+        $this->checkRequiredOpts();
     }
 
     /**
-     * @throws \alphayax\utils\cli\exception\MissingArgException
+     * If help flag have been specified, display help and exit
      */
-    private function checkRequiredOptions()
+    protected function checkForHelp()
     {
-        $providedOpts = array_keys($this->opt_x);
-        $requiredOpts = $this->options->getRequiredOpts();
-
-        $missingOpts = [];
-        foreach ($requiredOpts as $requiredOpt) {
-            if ( ! in_array($requiredOpt->getShortOpt(), $providedOpts)
-                && ! in_array($requiredOpt->getLongOpt(), $providedOpts)) {
-                $missingOpts[] = $requiredOpt;
+        try {
+            if ($this->options->getFromLongOptName('help')->isPresent()) {
+                $this->help->display($this->options);
+                exit(0);
             }
+        } catch (exception\UndefinedOptionException $e) {
+
         }
+    }
 
+    /**
+     * Check if all required parameters are present
+     */
+    protected function checkRequiredOpts()
+    {
+        try {
+            $this->options->checkRequiredOptions();
+        } catch (MissingArgException $e) {
 
-        /// If required fields are missing, throw an exception
-        if ( ! empty($missingOpts)) {
-            $exception = new MissingArgException();
-            $exception->setMissingArgs($missingOpts);
-            $exception->setProvidedArgs($providedOpts);
-            $exception->setRequiredArgs($requiredOpts);
-            throw $exception;
+            echo "ERROR : Required parameters are missing.". PHP_EOL;
+            echo "Please specify :". PHP_EOL;
+            $requiredArgs = $e->getRequiredArgs();
+            foreach ( $requiredArgs as $requiredArg){
+
+                $ReqArgLine = '';
+
+                if ($requiredArg->hasShortOpt()) {
+                    $ReqArgLine .= '-' . $requiredArg->getShortOpt();
+                }
+                else {
+                    $ReqArgLine .= '--' . $requiredArg->getLongOpt();
+                }
+
+                echo "\t". $ReqArgLine . "\t" . $requiredArg->getDescription() . PHP_EOL;
+            }
+            echo "". PHP_EOL;
+            $this->help->display($this->options);
+            exit(1);
         }
     }
 
     /**
      * Return the value of a specific option
-     * @param $optionName
-     * @return mixed
+     * @param string $optionName
+     * @return string
+     * @throws \alphayax\utils\cli\exception\UndefinedOptionException
      */
     public function getValueName($optionName)
     {
-        return @$this->opt_x[$optionName];
+        return $this->options->getFromOptName($optionName)->getValue();
     }
 
     /**
      * Return the value of a specific option
      * @param Option $option
-     * @return mixed
+     * @return string
+     * @deprecated use directly getValue on the option
      */
     public function getValue(Option $option)
     {
-        return @$this->opt_x[$option->getShortOpt()] ?: @$this->opt_x[$option->getLongOpt()];
+        return $option->getValue();
     }
 
     /**
      * Return true if the option have been specified in script args
-     * @param $optionName
+     * @param string $optionName
      * @return bool
+     * @throws \alphayax\utils\cli\exception\UndefinedOptionException
      */
     public function hasOptionName($optionName)
     {
-        return array_key_exists($optionName, $this->opt_x);
+        return $this->options->getFromOptName($optionName)->isPresent();
     }
 
     /**
      * Return true if the option have been specified in script args
      * @param Option $option
      * @return bool
+     * @deprecated use directly isPresent on the Option
      */
     public function hasOption(Option $option)
     {
-        return array_key_exists($option->getLongOpt(), $this->opt_x)
-            || array_key_exists($option->getShortOpt(), $this->opt_x);
+        return $option->isPresent();
     }
 
     /**

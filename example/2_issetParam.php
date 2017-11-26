@@ -11,9 +11,8 @@ $verboseOption = $Opt->addOpt('v', 'verbose', 'Verbose Mode');
 $Opt->parse();
 
 // Check if option verbose is specified
-if( $Opt->hasOption( $verboseOption)){
-    echo "Option verbose is enabled";
-}
-else {
-    echo "Verbose mode disabled";
+if( $verboseOption->isPresent()){
+    echo 'Option verbose is enabled'. PHP_EOL;
+} else {
+    echo 'Verbose mode disabled'. PHP_EOL;
 }

@@ -55,7 +55,7 @@ class Help
         $emptyLongPad = str_repeat(' ', $longPad);
         foreach ($options as $option) {
 
-            $valueFlag = $option->hasValue() ? ' <value>' : '';
+            $valueFlag = $option->askValue() ? ' <value>' : '';
 
             /// Short opt
             $shortOpt = $emptyShortPad;

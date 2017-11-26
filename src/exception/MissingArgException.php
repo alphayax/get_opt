@@ -8,7 +8,7 @@ use alphayax\utils\cli\model\Option;
  * Class MissingArgException
  * @package alphayax\utils\cli\exception
  */
-class MissingArgException extends \Exception
+class MissingArgException extends AbstractException
 {
     /** @var Option[] List of missing Args */
     protected $missingArgs = [];
