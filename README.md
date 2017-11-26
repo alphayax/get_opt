@@ -16,6 +16,8 @@ A library to manage scripts arguments
 [![Total Downloads](https://poser.pugx.org/alphayax/get_opt/downloads)](https://packagist.org/packages/alphayax/get_opt)
 
 ## Features
+
+- Singleton pattern
 - Auto generate help
 - Manage short and long option (-a --abc)
 - Manage values and multiple values (-v /toto -v /tutu)
@@ -26,7 +28,7 @@ A library to manage scripts arguments
 ### Check if a parameter (specified via a letter or a name) is set
 
 ```php
-$Args = new GetOpt();
+$Args = new \alphayax\utils\cli\GetOpt::getInstance();
 $Args->setDescription('This script is a tiny example to show library features');
 $verboseOption = $Args->addOpt('v', 'verbose', 'Verbose Mode');
 
@@ -38,7 +40,7 @@ $isVerboseMode = $verboseOption->isPresent();
 ### Get the value of the --file option
 
 ```php
-$Args = new \alphayax\utils\cli\GetOpt();
+$Args = new \alphayax\utils\cli\GetOpt::getInstance();
 $Args->setDescription('This script is a tiny example to show library features');
 $fileOption = $Args->addOpt('f', 'file', 'File name', true);
 

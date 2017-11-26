@@ -6,6 +6,7 @@ use alphayax\utils\cli\exception\MissingArgException;
 use alphayax\utils\cli\model\Help;
 use alphayax\utils\cli\model\Option;
 use alphayax\utils\cli\model\OptionList;
+use alphayax\utils\cli\pattern\SingletonTrait;
 
 
 /**
@@ -14,6 +15,8 @@ use alphayax\utils\cli\model\OptionList;
  */
 class GetOpt
 {
+    use SingletonTrait;
+
     /** @var array Required options */
     protected $requiredOpt = [];
 
@@ -30,7 +33,7 @@ class GetOpt
      * GetOpt constructor.
      * Add the -h and --help options
      */
-    public function __construct()
+    protected function __construct()
     {
         $this->help = new Help();
         $this->options = new OptionList();
@@ -156,17 +159,6 @@ class GetOpt
     }
 
     /**
-     * Return the value of a specific option
-     * @param Option $option
-     * @return string
-     * @deprecated use directly getValue on the option
-     */
-    public function getValue(Option $option)
-    {
-        return $option->getValue();
-    }
-
-    /**
      * Return true if the option have been specified in script args
      * @param string $optionName
      * @return bool
@@ -175,17 +167,6 @@ class GetOpt
     public function hasOptionName($optionName)
     {
         return $this->options->getFromOptName($optionName)->isPresent();
-    }
-
-    /**
-     * Return true if the option have been specified in script args
-     * @param Option $option
-     * @return bool
-     * @deprecated use directly isPresent on the Option
-     */
-    public function hasOption(Option $option)
-    {
-        return $option->isPresent();
     }
 
     /**

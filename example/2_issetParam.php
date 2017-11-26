@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+use alphayax\utils\cli\GetOpt;
+
 require_once '../vendor/autoload.php';
 
-$Opt = new \alphayax\utils\cli\GetOpt();
+$Opt = GetOpt::getInstance();
 $Opt->setDescription('This script is a tiny example to show library features');
 
 $verboseOption = $Opt->addOpt('v', 'verbose', 'Verbose Mode');
