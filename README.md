@@ -15,39 +15,47 @@ A library to manage scripts arguments
 [![License](https://poser.pugx.org/alphayax/get_opt/license)](https://packagist.org/packages/alphayax/get_opt)
 [![Total Downloads](https://poser.pugx.org/alphayax/get_opt/downloads)](https://packagist.org/packages/alphayax/get_opt)
 
+## Features
+- Auto generate help
+- Manage short and long option (-a --abc)
+- Manage values and multiple values (-v /toto -v /tutu)
+- Manage required options
+
 ## Examples
-
-### Check if a parameter with a specific name is set
-
-```php
-$Args = new GetOpt();
-$Args->addShortOpt( 'd', 'Debug mode');
-$Args->addLongOpt( 'dry-run', 'Dry Run mode');
-
-$Args->parse();
-
-$isDryRun  = $Args->hasOptionName( 'dry-run');
-```
 
 ### Check if a parameter (specified via a letter or a name) is set
 
 ```php
-$Opt = new GetOpt();
-$Opt->setDescription('This script is a tiny example to show library features');
-$verboseOption = $Opt->addOpt('v', 'verbose', 'Verbose Mode');
+$Args = new GetOpt();
+$Args->setDescription('This script is a tiny example to show library features');
+$verboseOption = $Args->addOpt('v', 'verbose', 'Verbose Mode');
 
-$Opt->parse();
+$Args->parse();
 
-$isVerboseMode = $Opt->hasOption( $verboseOption);
+$isVerboseMode = $verboseOption->isPresent();
 ```
 
+### Get the value of the --file option
 
-### Auto-generated Help
+```php
+$Args = new \alphayax\utils\cli\GetOpt();
+$Args->setDescription('This script is a tiny example to show library features');
+$fileOption = $Args->addOpt('f', 'file', 'File name', true);
+
+$Args->parse();
+
+// Check if file option is specified (via -f or --file)
+if( $fileOption->isPresent()){
+    $fileName = $fileOption->getValue();
+}
+```
+
+## Auto-generated Help
 
 Example of help output (if the -h or --help flag is specified) :
 
 ```
-    Description
+   Description
    	This script is a tiny example to show library features
    
    Usage

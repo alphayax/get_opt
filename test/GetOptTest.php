@@ -6,7 +6,6 @@
 class GetOptTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @throws \alphayax\utils\cli\exception\MissingArgException
      */
     public function testConstruct()
     {
@@ -20,17 +19,14 @@ class GetOptTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @throws \alphayax\utils\cli\exception\MissingArgException
-     * @expectedException \alphayax\utils\cli\exception\MissingArgException
+     * @throws \alphayax\utils\cli\exception\ConflictException
+     * @expectedException \alphayax\utils\cli\exception\ConflictException
      */
-    public function testException()
+    public function testDuplicate()
     {
-
         $opt = new \alphayax\utils\cli\GetOpt();
-        $opt->setDescription('This script is a tiny example to show library features');
-        $opt->addLongOpt('dry-run', 'Dry Run mode', true, true);
         $opt->addShortOpt('d', 'Debug mode');
-        $opt->addOpt('v', 'verbose', "Verbose Mode");
+        $opt->addShortOpt('d', 'Debug mode');
 
         $opt->parse();
     }
