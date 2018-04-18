@@ -28,7 +28,7 @@ A library to manage scripts arguments
 ### Check if a parameter (specified via a letter or a name) is set
 
 ```php
-$Args = new \alphayax\utils\cli\GetOpt::getInstance();
+$Args = \alphayax\utils\cli\GetOpt::getInstance();
 $Args->setDescription('This script is a tiny example to show library features');
 $verboseOption = $Args->addOpt('v', 'verbose', 'Verbose Mode');
 
@@ -40,7 +40,7 @@ $isVerboseMode = $verboseOption->isPresent();
 ### Get the value of the --file option
 
 ```php
-$Args = new \alphayax\utils\cli\GetOpt::getInstance();
+$Args = \alphayax\utils\cli\GetOpt::getInstance();
 $Args->setDescription('This script is a tiny example to show library features');
 $fileOption = $Args->addOpt('f', 'file', 'File name', true);
 
