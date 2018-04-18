@@ -26,8 +26,8 @@ class Option
     /** @var bool Parsed presence of the variable */
     protected $isPresent = false;
 
-    /** @var string|array Parsed value of the option */
-    protected $value = '';
+    /** @var null|string|array Parsed value of the option */
+    protected $value = null;
 
     /**
      * Option constructor.
@@ -103,6 +103,7 @@ class Option
     }
 
     /**
+     * Return true if the option was provided
      * @return bool
      */
     public function isPresent()
@@ -119,7 +120,9 @@ class Option
     }
 
     /**
-     * @return string|array
+     * Return the value of the option
+     * If option is specified more than 1 time, will return an array
+     * @return string|array|null
      */
     public function getValue()
     {
